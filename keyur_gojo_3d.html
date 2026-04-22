@@ -1,0 +1,447 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.pg{background:#f0f6ff;color:#0a0a2e;font-family:'Inter',sans-serif;width:100%;overflow-x:hidden;position:relative;}
+
+/* Floating particles canvas */
+#particles{position:absolute;inset:0;pointer-events:none;z-index:0;}
+
+/* Corner LEDs */
+.corners{position:absolute;inset:0;pointer-events:none;z-index:1;}
+.cl{position:absolute;width:320px;height:320px;}
+.cl.tl{top:0;left:0;background:radial-gradient(ellipse at 0% 0%,rgba(59,130,246,0.3) 0%,transparent 65%);animation:lp 4s ease-in-out infinite;}
+.cl.tr{top:0;right:0;background:radial-gradient(ellipse at 100% 0%,rgba(96,165,250,0.25) 0%,transparent 65%);animation:lp 4s ease-in-out infinite 1.3s;}
+.cl.bl{bottom:0;left:0;background:radial-gradient(ellipse at 0% 100%,rgba(147,197,253,0.28) 0%,transparent 65%);animation:lp 4s ease-in-out infinite 2.5s;}
+.cl.br{bottom:0;right:0;background:radial-gradient(ellipse at 100% 100%,rgba(59,130,246,0.22) 0%,transparent 65%);animation:lp 4s ease-in-out infinite 0.7s;}
+@keyframes lp{0%,100%{opacity:.5;}50%{opacity:1;}}
+
+/* HERO */
+.hero{
+  width:100%;background:#1a3faa;
+  display:grid;grid-template-columns:1fr 420px;
+  align-items:center;
+  position:relative;z-index:2;overflow:hidden;
+  border-bottom:3px solid #1e3a8a;
+  min-height:520px;
+}
+.hero-grid-lines{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+.hero-text{padding:4rem 3rem;position:relative;z-index:1;}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:7px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:1.5rem;}
+.hn{font-size:clamp(4rem,9vw,7rem);font-weight:900;letter-spacing:-5px;line-height:.88;text-transform:uppercase;color:#fff;display:block;}
+.hn.g{background:linear-gradient(135deg,#bfdbfe,#7dd3fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hx{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:300;color:rgba(255,255,255,0.18);display:block;line-height:1;}
+.hero-tagline{margin-top:1.5rem;font-size:11px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+
+/* 3D scene container */
+.scene-wrap{
+  position:relative;height:520px;overflow:visible;
+  display:flex;align-items:flex-end;justify-content:center;
+  perspective:900px;
+}
+
+/* 3D card that floats */
+.card3d{
+  position:relative;
+  transform-style:preserve-3d;
+  animation:float3d 6s ease-in-out infinite;
+}
+@keyframes float3d{
+  0%,100%{transform:translateY(0px) rotateY(-8deg) rotateX(3deg);}
+  50%{transform:translateY(-18px) rotateY(8deg) rotateX(-3deg);}
+}
+
+/* Gojo SVG illustration */
+.gojo-svg{display:block;width:340px;position:relative;z-index:2;}
+
+/* Domain expansion ring */
+.domain-ring{
+  position:absolute;
+  bottom:30px;left:50%;transform:translateX(-50%);
+  width:280px;height:50px;
+  border-radius:50%;
+  border:2px solid rgba(147,197,253,0.4);
+  animation:ringPulse 3s ease-in-out infinite;
+  z-index:1;
+}
+.domain-ring::before{
+  content:'';position:absolute;inset:6px;border-radius:50%;
+  border:1px solid rgba(147,197,253,0.2);
+  animation:ringPulse 3s ease-in-out infinite .5s;
+}
+.domain-ring::after{
+  content:'';position:absolute;inset:-10px;border-radius:50%;
+  border:1px solid rgba(147,197,253,0.1);
+  animation:ringPulse 3s ease-in-out infinite 1s;
+}
+@keyframes ringPulse{0%,100%{opacity:.6;transform:scaleX(1);}50%{opacity:1;transform:scaleX(1.05);}}
+
+/* Energy orbs */
+.orb{
+  position:absolute;border-radius:50%;
+  background:rgba(147,197,253,0.6);
+  animation:orbFloat 4s ease-in-out infinite;
+}
+.orb1{width:10px;height:10px;top:80px;left:20px;animation-delay:0s;}
+.orb2{width:6px;height:6px;top:140px;right:15px;animation-delay:1s;}
+.orb3{width:14px;height:14px;top:200px;left:10px;animation-delay:2s;}
+.orb4{width:8px;height:8px;top:60px;right:40px;animation-delay:.5s;}
+.orb5{width:5px;height:5px;top:300px;right:25px;animation-delay:1.5s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0);opacity:.7;}50%{transform:translateY(-12px);opacity:1;}}
+
+/* Hex grid background in scene */
+.hex-bg{position:absolute;inset:0;opacity:.15;pointer-events:none;}
+
+/* IDENTITY STRIP */
+.id-strip{display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border-bottom:1px solid #dbeafe;position:relative;z-index:2;}
+.id-cell{padding:2.5rem 2rem;border-right:1px solid #dbeafe;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;position:relative;overflow:hidden;}
+.id-cell::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1d4ed8,#60a5fa);transform:scaleX(0);transform-origin:left;transition:transform .3s ease;}
+.id-cell:hover::before{transform:scaleX(1);}
+.id-cell:last-child{border-right:none;}
+.id-cell.vis{opacity:1;transform:translateY(0);}
+.id-cell:hover{background:#f0f6ff;}
+.id-num{font-size:3rem;font-weight:900;letter-spacing:-3px;color:rgba(59,130,246,0.13);line-height:1;margin-bottom:.6rem;}
+.id-title{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1e3a8a;margin-bottom:.4rem;}
+.id-desc{font-size:12px;color:#6b7280;line-height:1.7;}
+
+/* 3D MEDAL SECTION */
+.medal-wrap{
+  width:100%;position:relative;z-index:2;overflow:hidden;
+  background:#1a3faa;border-bottom:1px solid #1e3a8a;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.medal-wrap.vis{opacity:1;transform:translateY(0);}
+.medal-3d-scene{
+  display:flex;align-items:center;justify-content:center;
+  padding:4rem 2rem;gap:4rem;flex-wrap:wrap;
+}
+.medal-coin{
+  width:150px;height:150px;
+  position:relative;
+  transform-style:preserve-3d;
+  animation:coinSpin 6s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes coinSpin{
+  0%,100%{transform:rotateY(0deg) rotateX(10deg);}
+  50%{transform:rotateY(25deg) rotateX(-5deg);}
+}
+.coin-face{
+  width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#e2e8f0,#94a3b8 40%,#64748b 80%,#475569);
+  border:4px solid rgba(255,255,255,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:60px;
+  position:relative;
+}
+.coin-face::before{
+  content:'';position:absolute;
+  top:10px;left:15px;width:40px;height:25px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  transform:rotate(-30deg);
+}
+.coin-face::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.15);
+  box-shadow:inset -6px -6px 20px rgba(0,0,0,0.3);
+}
+.coin-edge{
+  position:absolute;
+  top:8px;left:-8px;
+  width:8px;height:134px;
+  background:linear-gradient(180deg,#94a3b8,#475569,#94a3b8);
+  border-radius:0 0 0 4px;
+  transform:rotateY(-90deg);
+  transform-origin:right center;
+}
+.medal-text-block{text-align:center;}
+.medal-bg-text{font-size:clamp(5rem,15vw,12rem);font-weight:900;color:rgba(255,255,255,0.04);letter-spacing:-6px;text-transform:uppercase;line-height:1;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;}
+.medal-title{font-size:clamp(2rem,6vw,4.5rem);font-weight:900;letter-spacing:-3px;text-transform:uppercase;color:#fff;line-height:.9;margin-bottom:.8rem;}
+.medal-sub{font-size:11px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.38);margin-bottom:1.5rem;}
+.medal-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.mpill{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 18px;color:rgba(255,255,255,0.6);}
+
+/* QUOTE */
+.quote-sec{width:100%;padding:4rem 2rem;background:#fff;border-bottom:1px solid #dbeafe;position:relative;z-index:2;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;}
+.quote-sec.vis{opacity:1;transform:translateY(0);}
+.big-q{font-size:clamp(4rem,12vw,8rem);font-weight:900;color:rgba(59,130,246,0.08);line-height:.7;display:block;margin-bottom:.5rem;}
+.quote-text{font-size:clamp(1.1rem,2.5vw,1.8rem);font-weight:300;font-style:italic;color:#1e3a8a;line-height:1.6;max-width:680px;}
+.quote-by{margin-top:1.2rem;font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#3b82f6;}
+
+/* GOJO SPLIT */
+.gojo-sec{width:100%;position:relative;z-index:2;border-bottom:1px solid #dbeafe;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;}
+.gojo-sec.vis{opacity:1;transform:translateY(0);}
+.gojo-top{display:grid;grid-template-columns:1fr 1fr;}
+.gojo-left{padding:4rem 2rem;background:#fff;border-right:1px solid #dbeafe;}
+.gojo-right{padding:4rem 2rem;background:#eff6ff;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+.gojo-eyebrow{font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#3b82f6;margin-bottom:1rem;}
+.gojo-big{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;letter-spacing:-3px;text-transform:uppercase;color:#1d4ed8;line-height:.9;margin-bottom:1.5rem;}
+.gojo-body{font-size:13px;color:#6b7280;line-height:1.9;}
+.gojo-attr{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1px solid #bfdbfe;border-radius:8px;background:#fff;}
+.gojo-attr-dot{width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0;}
+.gojo-attr-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#1e40af;}
+
+/* FOOTER */
+.foot{width:100%;padding:3rem 2rem;background:#1a3faa;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative;z-index:2;}
+.foot-left{font-size:clamp(1.5rem,4vw,2.8rem);font-weight:900;letter-spacing:-2px;text-transform:uppercase;color:rgba(255,255,255,0.18);}
+.foot-right{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.26);text-align:right;line-height:2;}
+
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr;}
+  .scene-wrap{height:360px;}
+  .gojo-svg{width:260px;}
+  .id-strip{grid-template-columns:1fr;}
+  .id-cell{border-right:none;border-bottom:1px solid #dbeafe;}
+  .gojo-top{grid-template-columns:1fr;}
+  .gojo-left{border-right:none;border-bottom:1px solid #dbeafe;}
+}
+</style>
+
+<div class="pg">
+  <canvas id="particles"></canvas>
+  <div class="corners">
+    <div class="cl tl"></div><div class="cl tr"></div>
+    <div class="cl bl"></div><div class="cl br"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-text">
+      <div class="hero-eyebrow">The Honored One &nbsp;·&nbsp; State Champion</div>
+      <span class="hn">Keyur</span>
+      <span class="hx">×</span>
+      <span class="hn g">Gojo</span>
+      <p class="hero-tagline">Champion &nbsp;·&nbsp; Swimmer &nbsp;·&nbsp; Limitless</p>
+    </div>
+
+    <!-- 3D Gojo scene -->
+    <div class="scene-wrap">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+      <div class="orb orb4"></div>
+      <div class="orb orb5"></div>
+      <div class="domain-ring"></div>
+      <div class="card3d">
+        <svg class="gojo-svg" viewBox="0 0 340 500" xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Shadow/ground -->
+          <ellipse cx="170" cy="488" rx="110" ry="12" fill="rgba(0,0,0,0.25)"/>
+
+          <!-- Infinity domain aura -->
+          <ellipse cx="170" cy="420" rx="160" ry="28" fill="rgba(147,197,253,0.08)"/>
+          <ellipse cx="170" cy="420" rx="120" ry="20" fill="rgba(147,197,253,0.07)"/>
+          <ellipse cx="170" cy="420" rx="80" ry="13" fill="rgba(147,197,253,0.09)"/>
+
+          <!-- Legs -->
+          <rect x="145" y="370" width="32" height="90" rx="10" fill="#0f172a"/>
+          <rect x="163" y="370" width="32" height="90" rx="10" fill="#1e293b"/>
+          <!-- Shoes -->
+          <ellipse cx="161" cy="457" rx="22" ry="10" fill="#0a0a1a"/>
+          <ellipse cx="179" cy="457" rx="22" ry="10" fill="#111827"/>
+
+          <!-- Body / jacket -->
+          <path d="M95 265 Q75 310 72 390 L172 390 L268 390 Q265 310 245 265 Q215 248 170 245 Q125 248 95 265Z" fill="#0f172a"/>
+          <!-- Jacket shading side -->
+          <path d="M170 245 L172 390 Q215 385 245 370 Q260 340 258 290 Q240 260 215 250Z" fill="#1e293b"/>
+          <!-- Jacket lapels -->
+          <path d="M150 263 Q170 280 190 263 L196 310 Q170 322 144 310Z" fill="#f8fafc"/>
+          <!-- Belt/waist detail -->
+          <rect x="100" y="340" width="140" height="14" rx="3" fill="#1e293b"/>
+          <rect x="160" y="338" width="20" height="18" rx="3" fill="#374151"/>
+
+          <!-- Arms -->
+          <!-- Left arm raised slightly -->
+          <path d="M95 270 Q60 290 45 330 Q55 345 72 340 Q80 305 100 285Z" fill="#0f172a"/>
+          <!-- Left hand -->
+          <ellipse cx="48" cy="338" rx="15" ry="12" fill="#fde8d8"/>
+          <!-- Right arm down -->
+          <path d="M245 270 Q280 290 290 340 Q278 352 265 345 Q258 305 240 285Z" fill="#1e293b"/>
+          <!-- Right hand -->
+          <ellipse cx="287" cy="342" rx="15" ry="12" fill="#fde8d8"/>
+
+          <!-- Neck -->
+          <rect x="157" y="232" width="26" height="36" rx="8" fill="#fde8d8"/>
+
+          <!-- Head shape -->
+          <ellipse cx="170" cy="198" rx="55" ry="62" fill="#fde8d8"/>
+
+          <!-- Ear left -->
+          <ellipse cx="116" cy="200" rx="9" ry="13" fill="#f5d0b5"/>
+          <!-- Ear right -->
+          <ellipse cx="224" cy="200" rx="9" ry="13" fill="#f5d0b5"/>
+
+          <!-- Back hair volume -->
+          <ellipse cx="170" cy="148" rx="65" ry="42" fill="#e8edf2"/>
+          <!-- Back hair sides -->
+          <path d="M105 170 Q82 155 80 130 Q90 108 110 100 Q95 125 100 152Z" fill="#dde3ea"/>
+          <path d="M235 170 Q258 155 260 130 Q250 108 230 100 Q245 125 240 152Z" fill="#dde3ea"/>
+
+          <!-- Top hair volume (fluffy white) -->
+          <path d="M120 155 Q118 120 130 100 Q148 80 170 76 Q192 80 210 100 Q222 120 220 155 Q200 140 170 138 Q140 140 120 155Z" fill="#f1f5f9"/>
+
+          <!-- Hair strands -->
+          <path d="M130 152 Q122 170 125 190 Q131 184 135 168 Q138 155 130 152Z" fill="#e2e8f0"/>
+          <path d="M150 140 Q144 162 147 182 Q153 176 155 160 Q157 147 150 140Z" fill="#e8edf2"/>
+          <path d="M170 136 Q166 158 168 178 Q174 172 175 156 Q176 143 170 136Z" fill="#f1f5f9"/>
+          <path d="M190 140 Q196 162 193 182 Q187 176 185 160 Q183 147 190 140Z" fill="#e8edf2"/>
+          <path d="M210 152 Q218 170 215 190 Q209 184 205 168 Q202 155 210 152Z" fill="#e2e8f0"/>
+
+          <!-- Side hair pieces -->
+          <path d="M115 175 Q96 185 90 210 Q96 222 108 218 Q106 198 115 175Z" fill="#dde3ea"/>
+          <path d="M225 175 Q244 185 250 210 Q244 222 232 218 Q234 198 225 175Z" fill="#dde3ea"/>
+
+          <!-- Blindfold — 3D look -->
+          <rect x="110" y="185" width="120" height="28" rx="6" fill="#1e293b"/>
+          <!-- Blindfold highlight top -->
+          <rect x="110" y="185" width="120" height="7" rx="4" fill="rgba(255,255,255,0.08)"/>
+          <!-- Blindfold strap right -->
+          <path d="M230 191 Q248 196 255 199 Q248 204 230 206Z" fill="#0f172a"/>
+          <!-- Blindfold sheen -->
+          <rect x="118" y="188" width="50" height="5" rx="3" fill="rgba(255,255,255,0.05)"/>
+
+          <!-- Nose -->
+          <path d="M162 218 Q170 225 178 218" fill="none" stroke="#e8c4a8" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Subtle smile -->
+          <path d="M155 234 Q170 243 185 234" fill="none" stroke="#c9956e" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- Subtle chin shadow -->
+          <path d="M128 218 Q122 240 130 258 Q150 270 170 272 Q190 270 210 258 Q218 240 212 218" fill="none" stroke="rgba(200,150,120,0.12)" stroke-width="1.5"/>
+
+          <!-- Glowing hand effect (left) - infinity technique -->
+          <ellipse cx="48" cy="338" rx="22" ry="18" fill="rgba(147,197,253,0.15)"/>
+          <ellipse cx="48" cy="338" rx="14" ry="11" fill="rgba(147,197,253,0.1)"/>
+
+          <!-- Energy particles from hand -->
+          <circle cx="28" cy="318" r="3" fill="rgba(147,197,253,0.7)"/>
+          <circle cx="20" cy="328" r="2" fill="rgba(147,197,253,0.5)"/>
+          <circle cx="35" cy="308" r="2" fill="rgba(147,197,253,0.6)"/>
+          <circle cx="15" cy="312" r="1.5" fill="rgba(147,197,253,0.4)"/>
+          <circle cx="42" cy="300" r="2.5" fill="rgba(147,197,253,0.5)"/>
+
+          <!-- Limitless text -->
+          <text x="170" y="478" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="rgba(147,197,253,0.45)" letter-spacing="5">∞ &nbsp;LIMITLESS&nbsp; ∞</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDENTITY -->
+  <div class="id-strip">
+    <div class="id-cell" id="c1">
+      <div class="id-num">01</div>
+      <div class="id-title">Karateka</div>
+      <div class="id-desc">Discipline and power forged in the dojo, one precise strike at a time.</div>
+    </div>
+    <div class="id-cell" id="c2" style="transition-delay:.15s">
+      <div class="id-num">02</div>
+      <div class="id-title">Swimmer</div>
+      <div class="id-desc">Cutting through water like a blade through silence and stillness.</div>
+    </div>
+    <div class="id-cell" id="c3" style="transition-delay:.3s">
+      <div class="id-num">03</div>
+      <div class="id-title">The Chosen</div>
+      <div class="id-desc">Gojo energy — limitless confidence, infinity lived as a lifestyle.</div>
+    </div>
+  </div>
+
+  <!-- MEDAL -->
+  <div class="medal-wrap" id="med">
+    <div class="medal-bg-text">Silver</div>
+    <div class="medal-3d-scene">
+      <div class="medal-coin">
+        <div class="coin-face">🥈</div>
+        <div class="coin-edge"></div>
+      </div>
+      <div class="medal-text-block">
+        <div class="medal-title">Silver<br>Medalist</div>
+        <div class="medal-sub">Karate &nbsp;·&nbsp; State Level Championship</div>
+        <div class="medal-pills">
+          <span class="mpill">State Level</span>
+          <span class="mpill">Silver Medal</span>
+          <span class="mpill">Karate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-sec" id="qt">
+    <span class="big-q">"</span>
+    <div class="quote-text">Throughout Heaven and Earth, I alone am the Honored One.</div>
+    <div class="quote-by">— Gojo Satoru</div>
+  </div>
+
+  <!-- GOJO SPLIT -->
+  <div class="gojo-sec" id="gj">
+    <div class="gojo-top">
+      <div class="gojo-left">
+        <div class="gojo-eyebrow">Alter Ego</div>
+        <div class="gojo-big">The<br>Gojo<br>Within</div>
+        <div class="gojo-body">Like Satoru Gojo, Keyur moves through life with quiet certainty — seeing everything, fearing nothing. In the pool, on the mat, the infinity flows uninterrupted.</div>
+      </div>
+      <div class="gojo-right">
+        <div class="gojo-attr"><div class="gojo-attr-dot"></div><div class="gojo-attr-label">Infinity &nbsp;·&nbsp; Limitless technique</div></div>
+        <div class="gojo-attr"><div class="gojo-attr-dot"></div><div class="gojo-attr-label">Six Eyes &nbsp;·&nbsp; Sees all, misses nothing</div></div>
+        <div class="gojo-attr"><div class="gojo-attr-dot"></div><div class="gojo-attr-label">Hollow Purple &nbsp;·&nbsp; Unstoppable force</div></div>
+        <div class="gojo-attr"><div class="gojo-attr-dot"></div><div class="gojo-attr-label">Domain Expansion &nbsp;·&nbsp; Total dominance</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="foot-left">Keyur × Gojo</div>
+    <div class="foot-right">Silver Medalist<br>Karate · State Level<br>Swimmer · Limitless</div>
+  </div>
+</div>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:0.1});
+['c1','c2','c3','med','qt','gj'].forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){
+  W=canvas.width=canvas.offsetWidth;
+  H=canvas.height=canvas.offsetHeight;
+}
+function mkPt(){
+  return{
+    x:Math.random()*W,y:Math.random()*H,
+    r:Math.random()*2+1,
+    vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,
+    a:Math.random()
+  };
+}
+function init(){resize();pts=Array.from({length:60},mkPt);}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;
+    if(p.y<0||p.y>H)p.vy*=-1;
+    p.a+=.005;
+    const alpha=.3+Math.sin(p.a)*.2;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(96,165,250,${alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize',()=>{resize();});
+init();draw();
+</script>
